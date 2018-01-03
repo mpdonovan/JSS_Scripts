@@ -21,13 +21,13 @@ bootCampStatus=""
 
 bootCampStatus=$(diskutil list | grep "BOOTCAMP" | awk '{print $NF}')
 
+apfsLocation=$(diskutil list | grep "Apple_APFS Container" | awk '{print $NF}')
+
 coreCheck=$(diskutil cs list)
 
 if [ "$coreCheck" != "No CoreStorage logical volume groups found" ]; then
 	echo "CoreStorage enabled"
 	osascript -e 'display dialog "Your computer has CoreStorage Enabled. \nPlease contact the JSS Administrator. \nExiting now." buttons {"Ok"} default button 1'
-
-	ps axco pid,command | grep "Casper Imaging" | awk '{ print $1; }' | xargs kill -9
 
 	exit 1
 fi
@@ -38,27 +38,18 @@ if [ -n "$bootCampStatus" ]; then
 
 	sleep 3
 
-	diskutil apfs resizeContainer disk0s2 0
+	diskutil apfs resizeContainer /dev/$apfsLocation 0
 
-	diskutil mergePartitions JHFS+ "Macintosh HD" /dev/disk0s2 /dev/$bootCampStatus
+	#diskutil mergePartitions JHFS+ "Macintosh HD" /dev/disk0s2 /dev/$bootCampStatus
 else
 	echo "No Bootcamp partition found"
 fi
 
 sleep 5
 
-winUpdate="2012 Win10 50M_50W
-2012 Win10 80M_20W
-2012 Win10 20M_80W
-2013 Win10 50M_50W
-2013 Win10 80M_20W
-2013 Win10 20M_80W
-2015 Win10 50M_50W
-2015 Win10 80M_20W
-2015 Win10 20M_80W
-2017 Win10 50M_50W
+winUpdate="2017 Win10 50M_50W
 2017 Win10 80M_20W
-2017 Win10 20M_80W"
+2017 Win10 40M_60W"
 
 modelStatus=""
 while [ -z "$modelStatus" ];do
@@ -81,105 +72,6 @@ fi
 echo $comModel
 
 case $value in
-'2012 Win10 50M_50W')
-	echo "2012 Win10 50M_50W"
-	if [[ $comModel == "MacBookPro9,1" || $comModel == "MacBookPro9,2" || $comModel == "MacBookPro10,1" || $comModel == "iMac13,1" || $comModel == "iMac13,2" ]]; then
-		echo "Model is Compatable"
-		modelStatus="Compatable"
-		installPackage="/Volumes/a-share-name/2012/win10_2012MBP_50M_50W_7_18.pkg"
-	else
-		echo "Model is Not Compatable"
-		incompatableModel
-	fi
-	;;
-'2012 Win10 80M_20W')
-	echo "2012 Win10 80M_20W"
-	if [[ $comModel == "MacBookPro9,1" || $comModel == "MacBookPro9,2" || $comModel == "MacBookPro10,1" || $comModel == "iMac13,1" || $comModel == "iMac13,2" ]]; then
-		echo "Model is Compatable"
-		modelStatus="Compatable"
-		installPackage="/Volumes/a-share-name/2012/win10_2012MBP_80M_20W_7_18.pkg"
-	else
-		echo "Model is Not Compatable"
-		incompatableModel
-	fi
-	;;
-'2012 Win10 20M_80W')
-	echo "2012 Win10 20M_80W"
-	if [[ $comModel == "MacBookPro9,1" || $comModel == "MacBookPro9,2" || $comModel == "MacBookPro10,1" || $comModel == "iMac13,1" || $comModel == "iMac13,2" ]]; then
-		echo "Model is Compatable"
-		modelStatus="Compatable"
-		installPackage="/Volumes/a-share-name/2012/win10_2012MBP_20M_80W_7_18.pkg"
-	else
-		echo "Model is Not Compatable"
-		incompatableModel
-	fi
-	;;
-'2013 Win10 50M_50W')
-	echo "2013 Win10 50M_50W"
-	if [[ $comModel == "MacBookPro11,1" || $comModel == "MacBookPro11,3" || $comModel == "iMac14,1" || $comModel == "iMac14,2" ]]; then
-		echo "Model is Compatable"
-		modelStatus="Compatable"
-		installPackage="/Volumes/a-share-name/2012/win10_2012MBP_50M_50W_7_18.pkg"
-	else
-		echo "Model is Not Compatable"
-		incompatableModel
-	fi
-	;;
-'2013 Win10 80M_20W')
-	echo "2013 Win10 80M_20W"
-	if [[ $comModel == "MacBookPro11,1" || $comModel == "MacBookPro11,3" || $comModel == "iMac14,1" || $comModel == "iMac14,2" ]]; then
-		echo "Model is Compatable"
-		modelStatus="Compatable"
-		installPackage="/Volumes/a-share-name/2012/win10_2012MBP_80M_20W_7_18.pkg"
-	else
-		echo "Model is Not Compatable"
-		incompatableModel
-	fi
-	;;
-'2013 Win10 20M_80W')
-	echo "2013 Win10 20M_80W"
-	if [[ $comModel == "MacBookPro11,1" || $comModel == "MacBookPro11,3" || $comModel == "iMac14,1" || $comModel == "iMac14,2" ]]; then
-		echo "Model is Compatable"
-		modelStatus="Compatable"
-		installPackage="/Volumes/a-share-name/2012/win10_2012MBP_20M_80W_7_18.pkg"
-	else
-		echo "Model is Not Compatable"
-		incompatableModel
-	fi
-	;;
-'2015 Win10 50M_50W')
-	echo "2015 Win10 50M_50W"
-	if [[ $comModel == "MacBookAir7,2" || $comModel == "MacBookPro11,5" || $comModel == "MacBookPro12,1" || $comModel == "iMac16,2" ]]; then
-		echo "Model is Compatable"
-		modelStatus="Compatable"
-		installPackage="/Volumes/a-share-name/2015/win10_2015MBP_50M_50W_7_16.pkg"
-	else
-		echo "Model is Not Compatable"
-		incompatableModel
-	fi
-	;;
-'2015 Win10 80M_20W')
-	echo "2015 Win10 80M_20W"
-	if [[ $comModel == "MacBookAir7,2" || $comModel == "MacBookPro11,5" || $comModel == "MacBookPro12,1" || $comModel == "iMac16,2" ]]; then
-		echo "Model is Compatable"
-		modelStatus="Compatable"
-		installPackage="/Volumes/a-share-name/2015/win10_2015MBP_80M_20W_7_16.pkg"
-	else
-		echo "Model is Not Compatable"
-		incompatableModel
-	fi
-	;;
-'2015 Win10 20M_80W')
-	echo "2015 Win10 20M_80W"
-	if [[ $comModel == "MacBookAir7,2" || $comModel == "MacBookPro11,5" || $comModel == "MacBookPro12,1" || $comModel == "iMac16,2" ]]; then
-		echo "Model is Compatable"
-		modelStatus="Compatable"
-		installPackage="/Volumes/a-share-name/2015/win10_2015MBP_20M_80W_7_27.pkg"
-	else
-		echo "Model is Not Compatable"
-		incompatableModel
-	fi
-	;;
 '2017 Win10 50M_50W')
 	echo "2017 Win10 50M_50W"
 	if [[ $comModel == "MacBookPro14,1" ]]; then
@@ -202,8 +94,8 @@ case $value in
 		incompatableModel
 	fi
 	;;
-'2017 Win10 20M_80W')
-	echo "2017 Win10 20M_80W"
+'2017 Win10 40M_60W')
+	echo "2017 Win10 40M_60W"
 	if [[ $comModel == "MacBookPro14,1" ]]; then
 		echo "Model is Compatable"
 		modelStatus="Compatable"
@@ -215,8 +107,6 @@ case $value in
 	;;
 esac
 done
-
-
 
 userName="ausername"
 userPass="apassword"
@@ -298,10 +188,6 @@ if [ "$button" == "0" ]; then
 open -b com.apple.systempreferences /System/Library/PreferencePanes/StartupDisk.prefPane &
 
 sleep 1
-
-ps axco pid,command | grep "Casper Imaging" | awk '{ print $1; }' | xargs kill -9
-
-sleep 2
 
 exit 0
 
