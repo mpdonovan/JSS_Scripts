@@ -47,6 +47,8 @@ Your computer will restart when updates are complete."
 
 	rm -rf "/Library/Application Support/JAMF/bin/updates"
 
+	jamf recon
+
 	echo "Restarting"
 	shutdown -r now
 }
