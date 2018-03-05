@@ -129,8 +129,8 @@ lastBootRaw=$(sysctl kern.boottime | awk -F'[= |,]' '{print $6}')
 lastBootFormat=$(date -jf "%s" "$lastBootRaw" +"%m-%d-%Y")
 
 
-#today=$(date +%s)
-today=$(date -v+4d +%s) ###########For Testing #############################################
+today=$(date +%s)
+#today=$(date -v+4d +%s) ###########For Testing #############################################
 
 diffDays=$(( (today - lastBootRaw) / 86400 ))
 
