@@ -60,6 +60,12 @@
 # some command or a series of commands separated by pipes or newlines or other functions
 # containing lists of commands could be added to the script & called by replacing "$cmdstr"
 # & "$pthstr" with the function names.
+###########################################################################################
+#
+#   Modified for KISD by Mike Donovan March 8, 2018
+#
+#
+###########################################################################################
 
 cleanUp(){
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
