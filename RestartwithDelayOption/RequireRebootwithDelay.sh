@@ -122,18 +122,15 @@ EOF
 /bin/chmod 644 /Library/LaunchDaemons/com.jamfps.cleanupDelayedRestart.plist
 }
 
-
 ## Check if the computer is bound to the staff domain if not exit script
-if [ ! -f "/Library/Preferences/OpenDirectory/Configurations/Active Directory/WINDOWS_NT_CS.plist" ]
-    	then
-        echo "Not bound to Staff Domain Exiting Script"
-        exit 0
-		fi
+if [ ! -f "/Library/Preferences/OpenDirectory/Configurations/Active Directory/WINDOWS_NT_CS.plist" ];then
+    echo "Not bound to Staff Domain Exiting Script"
+    exit 0
+fi
 
 lastBootRaw=$(sysctl kern.boottime | awk -F'[= |,]' '{print $6}')
 
 lastBootFormat=$(date -jf "%s" "$lastBootRaw" +"%m-%d-%Y")
-
 
 today=$(date +%s)
 #today=$(date -v+4d +%s) ###########For Testing #############################################
@@ -159,8 +156,6 @@ else
 	#echo "3 days or less Exiting"
 	exit 0
 fi
-
-
 
 jamfhelper()
 {
